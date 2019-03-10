@@ -1,0 +1,16 @@
+slack:
+  token: ""
+  channel: ""
+line:
+  secret: ""
+  token: ""
+  group: ""
+project:
+  - name: test
+    id: 999
+    branch:
+      - dev
+      - master
+notice:
+  - times: "@every 30s"
+    message: "timer test"
