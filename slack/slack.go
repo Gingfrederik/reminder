@@ -20,7 +20,7 @@ type API struct {
 }
 
 func (t *API) PushMessage(message string) {
-	t.Client.SendMessage(t.Client.NewOutgoingMessage("<@UFKUT5NJD> "+message, t.channelID))
+	t.Client.SendMessage(t.Client.NewOutgoingMessage(message, t.channelID))
 }
 
 func (t *API) HandleConnection() {
