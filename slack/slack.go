@@ -2,14 +2,15 @@ package slack
 
 import (
 	"fmt"
+	"releasebot/config"
 
 	"github.com/nlopes/slack"
 )
 
-func New(token string, channelID string) *API {
-	rtm := slack.New(token).NewRTM()
+func New(config config.SlackConfig) *API {
+	rtm := slack.New(config.Token).NewRTM()
 	return &API{
-		channelID: channelID,
+		channelID: config.Channel,
 		Client:    rtm,
 	}
 }

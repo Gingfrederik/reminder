@@ -1,30 +1,30 @@
 package config
 
 type Config struct {
-	Slack   slackConfig
-	Line    lineConfig
-	Project []project
-	Notice  []notice
+	Slack   SlackConfig
+	Line    LineConfig
+	Project []Project
+	Notice  []Notice
 }
 
-type slackConfig struct {
+type SlackConfig struct {
 	Token   string
 	Channel string
 }
 
-type lineConfig struct {
+type LineConfig struct {
 	Secret string
 	Token  string
 	Group  string
 }
 
-type project struct {
+type Project struct {
 	Name   string
 	ID     int
 	Branch []string
 }
 
-type notice struct {
+type Notice struct {
 	Times   string
 	Message string
 }
