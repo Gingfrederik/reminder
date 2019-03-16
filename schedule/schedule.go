@@ -16,8 +16,11 @@ func New(config *config.Config, slack *slack.API, line *line.API) *cron.Cron {
 	for _, notice := range config.Notice {
 		c.AddFunc(notice.Times, func() {
 			fmt.Println("send")
-			slack.PushMessage(notice.Message)
 			line.PushMessage(notice.Message)
+			if len(notice.User) != 0 {
+				notice.Message = fmt.Sprintf("<@%s> %s", notice.User, notice.Message)
+			}
+			slack.PushMessage(notice.Message)
 		})
 	}
 

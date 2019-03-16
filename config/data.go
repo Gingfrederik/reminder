@@ -26,5 +26,6 @@ type Project struct {
 
 type Notice struct {
 	Times   string
+	User    string
 	Message string
 }
