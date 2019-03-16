@@ -14,6 +14,7 @@ RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -ldflags "-s -w" -o main
 FROM alpine:latest
 RUN apk update && \
     apk upgrade && \
+    apk add --no-cache ca-certificates &&\
     mkdir -p /bot
 COPY --from=builder /bot/main /bot/main
 RUN addgroup -g 1000 appuser && \
