@@ -2,6 +2,7 @@ package schedule
 
 import (
 	"fmt"
+	"log"
 
 	"releasebot/config"
 	"releasebot/line"
@@ -10,16 +11,19 @@ import (
 	"github.com/robfig/cron"
 )
 
-func New(config *config.Config, slack *slack.API, line *line.API) *cron.Cron {
+func New(config *config.Config) *cron.Cron {
+
+	slack := slack.GetInstance(config.Slack)
+	line := line.GetInstance(config.Line)
 
 	c := cron.New()
 	for _, notice := range config.Notice {
+		if len(notice.User) != 0 {
+			notice.Message = fmt.Sprintf("<@%s> %s", notice.User, notice.Message)
+		}
 		c.AddFunc(notice.Times, func() {
-			fmt.Println("send")
+			log.Println("send")
 			line.PushMessage(notice.Message)
-			if len(notice.User) != 0 {
-				notice.Message = fmt.Sprintf("<@%s> %s", notice.User, notice.Message)
-			}
 			slack.PushMessage(notice.Message)
 		})
 	}

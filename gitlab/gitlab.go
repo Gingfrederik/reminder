@@ -1,7 +1,8 @@
 package gitlab
 
 import (
-	"fmt"
+	"log"
+	"sync"
 
 	"github.com/gin-gonic/gin"
 	"gopkg.in/go-playground/webhooks.v5/gitlab"
@@ -11,11 +12,16 @@ const (
 	path = "/webhooks"
 )
 
-func New() *GitlabHook {
+func GetInstance() *GitlabHook {
+	var instance *GitlabHook
+	var once sync.Once
 	hook, _ := gitlab.New()
-	return &GitlabHook{
-		hook: hook,
-	}
+	once.Do(func() {
+		instance = &GitlabHook{
+			hook: hook,
+		}
+	})
+	return instance
 }
 
 // GitlabHook handle gitlab hook
@@ -29,15 +35,15 @@ func (g *GitlabHook) Event(c *gin.Context) {
 	payload, err := g.hook.Parse(c.Request, gitlab.TagEvents)
 	if err != nil {
 		if err == gitlab.ErrEventNotFound {
-			fmt.Println("cant find event")
+			log.Println("cant find event")
 		}
 	}
 
 	switch payload.(type) {
 	case gitlab.TagEventPayload:
 		data := payload.(gitlab.TagEventPayload)
-		fmt.Printf("%+v", data)
+		log.Printf("%+v", data)
 	default:
-		fmt.Println("no support event")
+		log.Println("no support event")
 	}
 }

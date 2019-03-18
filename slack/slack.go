@@ -3,34 +3,44 @@ package slack
 import (
 	"fmt"
 	"releasebot/config"
+	"sync"
 
 	"github.com/nlopes/slack"
 )
 
-func New(config config.SlackConfig) *API {
-	rtm := slack.New(config.Token).NewRTM()
-	return &API{
-		channelID: config.Channel,
-		Client:    rtm,
-	}
+func GetInstance(config config.SlackConfig) *API {
+	var instance *API
+	var once sync.Once
+	client := slack.New(config.Token)
+	rtm := client.NewRTM()
+	once.Do(func() {
+		instance = &API{
+			channelID: config.Channel,
+			Client:    client,
+			RTM:       rtm,
+		}
+	})
+	return instance
 }
 
 type API struct {
 	channelID string
-	Client    *slack.RTM
+	Client    *slack.Client
+	RTM       *slack.RTM
 }
 
 func (t *API) PushMessage(message string) {
-	t.Client.SendMessage(t.Client.NewOutgoingMessage(message, t.channelID))
+	// t.RTM.SendMessage(t.RTM.NewOutgoingMessage(message, t.channelID))
+	t.Client.PostMessage(t.channelID, slack.MsgOptionText(message, false))
 }
 
 func (t *API) HandleConnection() {
-	t.Client.ManageConnection()
+	t.RTM.ManageConnection()
 }
 
 func (t *API) HandleEvent() {
 
-	for msg := range t.Client.IncomingEvents {
+	for msg := range t.RTM.IncomingEvents {
 		fmt.Print("Event Received: ")
 		switch ev := msg.Data.(type) {
 		case *slack.HelloEvent:
@@ -39,16 +49,10 @@ func (t *API) HandleEvent() {
 		case *slack.ConnectedEvent:
 			fmt.Println("Infos:", ev.Info)
 			fmt.Println("Connection counter:", ev.ConnectionCount)
-			t.Client.SendMessage(t.Client.NewOutgoingMessage("Connected", t.channelID))
+			// t.RTM.SendMessage(t.RTM.NewOutgoingMessage("Connected", t.channelID))
 
 		case *slack.MessageEvent:
-			fmt.Printf("Message: %v\n", ev)
-
-		case *slack.PresenceChangeEvent:
-			fmt.Printf("Presence Change: %v\n", ev)
-
-		case *slack.LatencyReport:
-			fmt.Printf("Current latency: %v\n", ev.Value)
+			fmt.Printf("Message: %+v\n", ev)
 
 		case *slack.RTMError:
 			fmt.Printf("Error: %s\n", ev.Error())

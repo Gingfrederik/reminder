@@ -8,13 +8,12 @@ require (
 	github.com/gorilla/websocket v1.4.0 // indirect
 	github.com/json-iterator/go v1.1.5 // indirect
 	github.com/line/line-bot-sdk-go v5.0.0+incompatible
+	github.com/lusis/go-slackbot v0.0.0-20180109053408-401027ccfef5 // indirect
 	github.com/lusis/slack-test v0.0.0-20180109053238-3c758769bfa6 // indirect
 	github.com/mattn/go-isatty v0.0.6 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect
-	github.com/moul/http2curl v1.0.0 // indirect
 	github.com/nlopes/slack v0.5.0
-	github.com/parnurzeal/gorequest v0.2.15 // indirect
 	github.com/pkg/errors v0.8.1 // indirect
 	github.com/robfig/cron v0.0.0-20180505203441-b41be1df6967
 	github.com/spf13/viper v1.3.1

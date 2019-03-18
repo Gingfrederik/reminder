@@ -8,8 +8,9 @@ type Config struct {
 }
 
 type SlackConfig struct {
-	Token   string
-	Channel string
+	Verification string
+	Token        string
+	Channel      string
 }
 
 type LineConfig struct {
