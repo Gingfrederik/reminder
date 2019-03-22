@@ -30,8 +30,8 @@ type API struct {
 }
 
 func (t *API) PushMessage(message string) {
-	// t.RTM.SendMessage(t.RTM.NewOutgoingMessage(message, t.channelID))
-	t.Client.PostMessage(t.channelID, slack.MsgOptionText(message, false))
+	t.RTM.SendMessage(t.RTM.NewOutgoingMessage(message, t.channelID))
+	// t.Client.PostMessage(t.channelID, slack.MsgOptionText(message, false))
 }
 
 func (t *API) HandleConnection() {
@@ -49,7 +49,7 @@ func (t *API) HandleEvent() {
 		case *slack.ConnectedEvent:
 			fmt.Println("Infos:", ev.Info)
 			fmt.Println("Connection counter:", ev.ConnectionCount)
-			// t.RTM.SendMessage(t.RTM.NewOutgoingMessage("Connected", t.channelID))
+			t.RTM.SendMessage(t.RTM.NewOutgoingMessage("Connected", t.channelID))
 
 		case *slack.MessageEvent:
 			fmt.Printf("Message: %+v\n", ev)

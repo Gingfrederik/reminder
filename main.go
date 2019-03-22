@@ -1,6 +1,9 @@
 package main
 
 import (
+	"log"
+	"time"
+
 	"releasebot/config"
 	"releasebot/gitlab"
 	"releasebot/line"
@@ -12,8 +15,8 @@ import (
 
 func main() {
 
+	log.Print(time.Now())
 	configuration := config.New()
-
 	slackAPI := slack.GetInstance(configuration.Slack)
 	gitlabAPI := gitlab.GetInstance()
 	_ = line.GetInstance(configuration.Line)

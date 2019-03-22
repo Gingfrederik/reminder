@@ -14,8 +14,10 @@ RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -ldflags "-s -w" -o main
 FROM alpine:latest
 RUN apk update && \
     apk upgrade && \
-    apk add --no-cache ca-certificates &&\
+    apk add --no-cache ca-certificates tzdata &&\
     mkdir -p /bot
+RUN cp /usr/share/zoneinfo/Asia/Taipei /etc/localtime
+RUN echo "Asia/Taipei" >  /etc/timezone
 COPY --from=builder /bot/main /bot/main
 RUN addgroup -g 1000 appuser && \
     adduser -D -u 1000 -G appuser appuser && \

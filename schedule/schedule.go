@@ -18,14 +18,16 @@ func New(config *config.Config) *cron.Cron {
 
 	c := cron.New()
 	for _, notice := range config.Notice {
-		if len(notice.User) != 0 {
-			notice.Message = fmt.Sprintf("<@%s> %s", notice.User, notice.Message)
+		n := notice
+		if len(n.User) != 0 {
+			n.Message = fmt.Sprintf("<@%s> %s", n.User, n.Message)
 		}
-		c.AddFunc(notice.Times, func() {
-			log.Println("send")
-			line.PushMessage(notice.Message)
-			slack.PushMessage(notice.Message)
+		c.AddFunc(n.Times, func() {
+			log.Printf("send %+v\n", n)
+			line.PushMessage(n.Message)
+			slack.PushMessage(n.Message)
 		})
+		log.Printf("add %+v\n", n)
 	}
 
 	return c
